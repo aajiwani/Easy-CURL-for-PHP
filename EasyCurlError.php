@@ -7,7 +7,7 @@
 
 class EasyCurlError
 {
-    private $CURL_ERROR_CODES = array(
+    private static $CURL_ERROR_CODES = array(
                                         1 => 'CURLE_UNSUPPORTED_PROTOCOL', 
                                         2 => 'CURLE_FAILED_INIT', 
                                         3 => 'CURLE_URL_MALFORMAT', 
@@ -98,7 +98,7 @@ class EasyCurlError
         
         if ($this->ErrorNumber > 0)
         {
-            $this->ErrorShortDescription = $this->CURL_ERROR_CODES[$this->ErrorNumber];
+            $this->ErrorShortDescription = self::$CURL_ERROR_CODES[$this->ErrorNumber];
         }
     }
 }

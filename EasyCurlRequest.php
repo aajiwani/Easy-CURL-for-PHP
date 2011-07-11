@@ -77,10 +77,16 @@ class EasyCurlRequest
             curl_setopt($this->curlInstance, CURLOPT_HTTPHEADER, $this->GetHeaders());
     }
     
-    public function __construct($url, $requestType, $cookieFile = null)
+    public function __construct($url, $requestType = EasyCurlRequestType::GET, $cookieFile = null)
     {
         $this->curlInstance = curl_init($url);
-        curl_setopt($this->curlInstance, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->curlInstance, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($this->curlInstance, CURLOPT_HEADER, TRUE);
+        
+        if( substr_count($url , "https://") > 0)
+        {
+            $this->NoVerifySSLCertificate();
+        }
         
         if ($cookieFile != null)
         {
@@ -105,6 +111,11 @@ class EasyCurlRequest
     public function SetUrl($url)
     {
         curl_setopt($this->curlInstance, CURLOPT_URL, $url);
+        
+        if( substr_count($url , "https://") > 0)
+        {
+            $this->NoVerifySSLCertificate();
+        }
     }
     
     public function SetAutoReferer($value = true)
@@ -143,12 +154,7 @@ class EasyCurlRequest
         }
     }
     
-    public function IncludeHeaderInOutput($value = true)
-    {
-        curl_setopt($this->curlInstance, CURLOPT_HEADER, $value);
-    }
-    
-    public function NoVerifySSLCertificate($value = true)
+    public function NoVerifySSLCertificate($value = false)
     {
         curl_setopt($this->curlInstance, CURLOPT_SSL_VERIFYPEER, $value);
     }
@@ -176,6 +182,15 @@ class EasyCurlRequest
     public function SetUserAgent($userAgent)
     {
         curl_setopt($this->curlInstance, CURLOPT_USERAGENT, $userAgent);
+    }
+    
+    public function SetProxy($proxyAddress, $proxyPort, $proxyUser, $proxyPass)
+    {
+        if ($proxyAddress && $proxyPort)
+            curl_setopt($this->curlInstance, CURLOPT_PROXY, trim($proxyAddress) . ":" . trim($proxyPort));
+            
+        if ($proxyUser && $proxyPass)
+            curl_setopt($this->curlInstance, CURLOPT_PROXYUSERPWD, trim($proxyUser) . ":" . trim($proxyPass));
     }
     
     public function AddCookie($cookie)
@@ -220,10 +235,9 @@ class EasyCurlRequest
     public function Execute()
     {
         $this->FinalizeRequest();
+        $result = curl_exec($this->curlInstance);
         
-        $result = '';
-        
-        if ($result = curl_exec($this->curlInstance) === FALSE)
+        if ($result === false)
         {
             return new EasyCurlError($this);
         }
