@@ -25,4 +25,9 @@ class EasyCurlHeaderException extends Exception
     
 }
 
+class EasyCurlCookieExtractorException extends Exception
+{
+    
+}
+
 ?>

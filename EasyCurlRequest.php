@@ -14,13 +14,6 @@ class EasyCurlRequest
     private $requestType = '';
     private $postParams = array();
     
-    private function FinalizeRequest()
-    {
-        $this->AttachHeaders();
-        $this->AttachCookies();
-        $this->AttachPostParameters();
-    }
-    
     private function GetCookieString()
     {
         $finalString = '';
@@ -31,6 +24,8 @@ class EasyCurlRequest
         }
         
         $finalString = rtrim($finalString, '; ');
+        
+        array_splice($this->cookies, 0);
         
         return $finalString;
     }
@@ -44,6 +39,8 @@ class EasyCurlRequest
             $finalArray[$postParam->ParamName] = $finalArray[$postParam->ParamValue];
         }
         
+        array_splice($this->postParams, 0);
+        
         return $finalArray;
     }
     
@@ -56,19 +53,31 @@ class EasyCurlRequest
             $finalArray[] = $header->HeaderName . ': ' . $header->HeaderValue;
         }
         
+        array_splice($this->headers, 0);
+        
         return $finalArray;
     }
     
     private function AttachCookies()
     {
         if ($this->cookiesEnabled)
-            curl_setopt($this->curlInstance, CURLOPT_COOKIE, $this->GetCookieString());
+        {
+            if (count($this->cookies) > 0)
+            {
+                curl_setopt($this->curlInstance, CURLOPT_COOKIE, $this->GetCookieString());
+            }
+        }
     }
     
     private function AttachPostParameters()
     {
         if ($this->requestType == EasyCurlRequestType::POST)
-            curl_setopt($this->curlInstance, CURLOPT_POSTFIELDS, $this->GetPostParams());
+        {
+            if (count($this->postParams) > 0)
+            {
+                curl_setopt($this->curlInstance, CURLOPT_POSTFIELDS, $this->GetPostParams());
+            }
+        }
     }
     
     private function AttachHeaders()
@@ -230,6 +239,13 @@ class EasyCurlRequest
     public function GetBaseCurlObject()
     {
         return $this->curlInstance;
+    }
+    
+    public function FinalizeRequest()
+    {
+        $this->AttachHeaders();
+        $this->AttachCookies();
+        $this->AttachPostParameters();
     }
     
     public function Execute()

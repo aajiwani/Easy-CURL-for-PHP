@@ -39,6 +39,11 @@ class EasyCurlResponse
             $this->body = $respDoc[1];
         }
     }
+    
+    private function ParseHeaders($headers)
+    {
+        
+    }
 }
 
 ?>
