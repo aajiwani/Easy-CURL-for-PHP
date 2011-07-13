@@ -20,6 +20,20 @@ class EasyCurlRequestType
 
 class EasyCurlCookie
 {
+    const DOMAIN_ATTR = 'domain';
+    const PATH_ATTR = 'path';
+    const EXPIRES_ATTR = 'expires';
+    const MAX_AGE_ATTR = 'max-age';
+    const VERSION_ATTR = 'version';
+    const SECURE_ATTR = 'secure';
+    const HTTPONLY_ATTR = 'httponly';
+    
+    public $Domain;
+    public $Expires = null;
+    public $Path;
+    public $Version;
+    public $IsSecure;
+    public $HttpOnly;
     public $CookieName;
     public $CookieValue;
     
@@ -34,6 +48,36 @@ class EasyCurlCookie
         {
             throw new EasyCurlCookieException("Name and value provided for cookie must be of type string.");
         }
+    }
+    
+    public function SetMaxAge($seconds)
+    {
+        $this->Expires = time() + $seconds;
+    }
+    
+    public function SetExpires($expiresValue)
+    {
+        $this->Expires = strtotime($expiresValue);
+    }
+    
+    public function SetSecure($value = true)
+    {
+        $this->IsSecure = $value;
+    }
+    
+    public function SetHttpOnly($value = true)
+    {
+        $this->HttpOnly = $value;
+    }
+    
+    public function GetDateWithFormat($format)
+    {
+        if ($this->Expires)
+        {
+            return date($format, $this->Expires);
+        }
+        
+        return null;
     }
 }
 

@@ -5,12 +5,17 @@
  * @copyright 2011
  */
 
+require_once('EasyCurlExceptions.php');
+require_once('EasyCurlHelperClasses.php');
+require_once('EasyCurlExceptions.php');
+require_once('EasyCurlError.php');
+require_once('EasyCurlResponse.php');
+
 class EasyCurlRequest
 {
     private $curlInstance = null;
     private $headers = array();
     private $cookies = array();
-    private $cookiesEnabled = false;
     private $requestType = '';
     private $postParams = array();
     
@@ -36,7 +41,7 @@ class EasyCurlRequest
         
         foreach ($this->postParams as $postParam)
         {
-            $finalArray[$postParam->ParamName] = $finalArray[$postParam->ParamValue];
+            $finalArray[$postParam->ParamName] = $postParam->ParamValue;
         }
         
         array_splice($this->postParams, 0);
@@ -60,12 +65,9 @@ class EasyCurlRequest
     
     private function AttachCookies()
     {
-        if ($this->cookiesEnabled)
+        if (count($this->cookies) > 0)
         {
-            if (count($this->cookies) > 0)
-            {
-                curl_setopt($this->curlInstance, CURLOPT_COOKIE, $this->GetCookieString());
-            }
+            curl_setopt($this->curlInstance, CURLOPT_COOKIE, $this->GetCookieString());
         }
     }
     
@@ -99,9 +101,10 @@ class EasyCurlRequest
         
         if ($cookieFile != null)
         {
-            $this->cookiesEnabled = true;
             curl_setopt($this->curlInstance, CURLOPT_COOKIEJAR, $cookieFile);
         }
+        
+        $this->requestType = $requestType;
         
         if ($requestType == EasyCurlRequestType::GET)
         {
@@ -204,13 +207,10 @@ class EasyCurlRequest
     
     public function AddCookie($cookie)
     {
-        if ($this->cookiesEnabled)
-        {
-            if ($cookie instanceof EasyCurlCookie)
-                $this->cookies[] = $cookie;
-            else
-                throw new EasyCurlCookieException("Expecting type EasyCurlCookie.");
-        }
+        if ($cookie instanceof EasyCurlCookie)
+            $this->cookies[] = $cookie;
+        else
+            throw new EasyCurlCookieException("Expecting type EasyCurlCookie.");
     }
     
     public function AddPostParameter($parameter)
