@@ -1,10 +1,17 @@
 <?php
 
 /**
- * @author Amir Ali Jiwani
+ * @author Amir Ali Jiwani <amir.ali@pi-labs.net>
  * @copyright 2011
+ * @link http://www.facebook.com/aajiwani
+ * @version 1.0
  */
-
+ 
+/**
+ * EasyCurlError
+ * 
+ * EasyCurlError is the class which maintains the state of a HTTP Request Error.
+ */
 class EasyCurlError
 {
     private static $CURL_ERROR_CODES = array(
@@ -86,15 +93,38 @@ class EasyCurlError
                                         87 => 'CURLE_FTP_BAD_FILE_LIST',
                                         88 => 'CURLE_CHUNK_FAILED'
                                         );
-                                        
+
+    /**
+     * Error number as returned in the web request.
+     * 
+     * @var int
+     */
     public $ErrorNumber;
+    
+    /**
+     * Error message as returned in the web request.
+     * 
+     * @var string
+     */
     public $ErrorMessage;
+    
+    /**
+     * Error's short description.
+     * 
+     * @var string
+     */
     public $ErrorShortDescription;
                                         
-    public function __construct($easyCurlRequest)
+    /**
+     * EasyCurlError::__construct()
+     * 
+     * @param mixed $curlObject Must be a curl resource.
+     * @return EasyCurlError EasyCurlError instance.
+     */
+    public function __construct($curlObject)
     {
-        $this->ErrorNumber = curl_errno($easyCurlRequest->GetBaseCurlObject());
-        $this->ErrorMessage = curl_error($easyCurlRequest->GetBaseCurlObject());
+        $this->ErrorNumber = curl_errno($curlObject);
+        $this->ErrorMessage = curl_error($curlObject);
         
         if ($this->ErrorNumber > 0)
         {

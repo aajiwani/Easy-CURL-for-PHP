@@ -1,26 +1,89 @@
 <?php
 
 /**
- * @author Amir Ali Jiwani
+ * @author Amir Ali Jiwani <amir.ali@pi-labs.net>
  * @copyright 2011
+ * @link http://www.facebook.com/aajiwani
+ * @version 1.0
  */
  
 require_once('EasyCurlCookieHelper.php');
 
+/**
+ * EasyCurlResponse
+ * 
+ * EasyCurlResponse is the class which maintains the state of a HTTP Response.
+ */
 class EasyCurlResponse
 {
+    /**
+     * Last visited url.
+     * 
+     * @var string
+     */
     public $CurrentUrl;
+    
+    /**
+     * Http response code as returned from the response.
+     * 
+     * @var int
+     */
     public $HttpResponseCode;
+    
+    /**
+     * Textual description of response code.
+     * 
+     * @var string
+     */
     public $HttpResponseCodeDescription;
+    
+    /**
+     * Last modification time of the returned web document.
+     * 
+     * @var string
+     */
     public $LastModifiedTime;
+    
+    /**
+     * Content type header of the web request.
+     * 
+     * @var string
+     */
     public $ContentType;
+    
+    /**
+     * Cookies returned in the document.
+     * Array of EasyCurlCookie
+     * 
+     * @var mixed
+     */
     public $Cookies;
+    
+    /**
+     * Headers returned in the document, including the Set-Cookie headers.
+     * Array of EasyCurlHeader
+     * 
+     * @var mixed
+     */
     public $Headers;
+    
+    /**
+     * Response content of the document returned by web request.
+     * 
+     * @var string
+     */
     public $ResposeBody;
     
-    public function __construct($easyCurlRequest, $response)
+    /**
+     * EasyCurlResponse::__construct()
+     * 
+     * @param mixed $curlObject Must be a curl resource.
+     * @param string $response Response returned from the curl resource.
+     * @return EasyCurlResponse EasyCurlResponse instance.
+     */
+    public function __construct($curlObject, $response)
     {
-        $curlInfo = curl_getinfo($easyCurlRequest->GetBaseCurlObject());
+        $curlInfo = curl_getinfo($curlObject);
         
         $this->CurrentUrl = $curlInfo['url'];
         $this->HttpResponseCode = $curlInfo['http_code'];
@@ -38,7 +101,7 @@ class EasyCurlResponse
         }
         else
         {
-            for ($i = 1; $i < count($respDoc) - 1; $i++)
+            for ($i = 0; $i < count($respDoc) - 1; $i++)
             {
                 $this->ParseHeaders($respDoc[$i]);
             }
@@ -47,6 +110,13 @@ class EasyCurlResponse
         }
     }
     
+    /**
+     * EasyCurlResponse::ParseHeaders()
+     * 
+     * Parses the simple textual header to a structure of Array of EasyCurlHeader and parses Cookies too from those headers.
+     * 
+     * @param mixed $headers Must be an array of string in the form of Name: Value
+     */
     private function ParseHeaders($headers)
     {
         $headersArray = preg_split("/(\r\n)+/", $headers);

@@ -30,4 +30,14 @@ class EasyCurlCookieExtractorException extends Exception
     
 }
 
+class EasyCurlExecuterCallbackException extends Exception
+{
+    
+}
+
+class EasyCurlExecuterException extends Exception
+{
+    
+}
+
 ?>

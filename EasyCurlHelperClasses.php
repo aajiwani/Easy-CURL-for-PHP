@@ -1,8 +1,10 @@
 <?php
 
 /**
- * @author Amir Ali Jiwani
+ * @author Amir Ali Jiwani <amir.ali@pi-labs.net>
  * @copyright 2011
+ * @link http://www.facebook.com/aajiwani
+ * @version 1.0
  */
  
 class EasyCurlHTTPVersion
@@ -121,6 +123,96 @@ class EasyCurlHeader
         $this->HeaderName = $name;
         $this->HeaderValue = $value;
     }
+}
+
+class EasyCurlExecuterCallback
+{
+    public $Receiver = null;
+    public $Callback = null;
+    
+    public function __construct($callback, $receiver = null)
+    {
+        $isCallable = false;
+        
+        if ($receiver != null)
+        {
+            $isCallable = is_callable(array($receiver, $callback), true);
+            
+            if ($isCallable)
+            {
+                $this->Receiver = $receiver;
+                $this->Callback = $callback;
+            }
+            else
+            {
+                throw new EasyCurlExecuterCallbackException("Callback expected");
+            }
+        }
+        else
+        {
+            $isCallable = is_callable($callback, false, $callable_name);
+            
+            if ($isCallable)
+            {
+                $this->Callback = $callable_name;
+            }
+            else
+            {
+                throw new EasyCurlExecuterCallbackException("Callback expected");
+            }
+        }
+    }
+    
+    public function Call($parameters = null)
+    {
+        if ($this->Receiver != null && $this->Callback != null)
+        {
+            $this->SendCallbackToReceiver($parameters);
+        }
+        else
+        {
+            $this->SendCallback($parameters);
+        }
+    }
+    
+    private function SendCallback($parameters = null)
+    {
+        if ($parameters != null)
+        {
+            call_user_func($this->Callback, $parameters);
+        }
+        else
+        {
+            call_user_func($this->Callback);
+        }
+    }
+    
+    private function SendCallbackToReceiver($parameters = null)
+    {
+        if ($parameters != null)
+        {
+            call_user_func(array($this->Receiver, $this->Callback), $parameters);
+        }
+        else
+        {
+            call_user_func(array($this->Receiver, $this->Callback));
+        }
+    }
+}
+
+class EasyCurlExecuterNode
+{
+    public $Url;
+    public $CurlResource;
+    public $Callback;
+    public $UserObject;
+}
+
+class EasyCurlExecuterResult
+{
+    public $Url;
+    public $Response;
+    public $UserState;
 }
 
 class EasyCurlHTTPCodeInfo

@@ -1,0 +1,31 @@
+/**
+ * @author Amir Ali Jiwani <amir.ali@pi-labs.net>
+ * @copyright 2011
+ * @link http://www.facebook.com/aajiwani
+ * @version 1.0
+ */
+ 
+ Easy Curl is the implementation of PHP's curl module in an object oriented way.
+ It works for a single request as well as for multiple requests.
+ 
+ 1.) Classes to use in package are :
+ 
+ EasyCurlRequest
+ EasyCurlResponse
+ EasyCurlError
+ EasyCurlExecuter
+ EasyCurlCookie
+ EasyCurlPostParameter
+ EasyCurlHeader
+ EasyCurlExecuterCallback
+ EasyCurlExecuterResult
+ 
+ 2.) Helper classes in package are :
+ 
+ EasyCurlHTTPVersion
+ EasyCurlRequestType
+ EasyCurlExecuterNode
+ EasyCurlHTTPCodeInfo
+ EasyCurlCookieExtractor
+ 
+ Examples folder contains all the usage samples.

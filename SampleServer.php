@@ -1,17 +1,19 @@
 <?php
 
 /**
- * @author Amir Ali Jiwani
+ * @author Amir Ali Jiwani <amir.ali@pi-labs.net>
  * @copyright 2011
+ * @link http://www.facebook.com/aajiwani
+ * @version 1.0
  */
 
 ob_start();
 
 session_start();
- 
-setcookie("TestCookie1", 'TestValue1', time()+3600, "/~rasmus/", ".localhost:81", 1, 1);
-setcookie("TestCookie2", 'TestValue2', time()+3600, "/~rasmus/", ".localhost:81", 1, 0);
-setcookie("TestCookie3", 'TestValue3', time()+3600, "/~rasmus/", ".localhost:81", 0, 0);
+
+setcookie("TestCookie1", 'TestValue1', time()+3600, "/subdir/", ".localhost", 1, 1);
+setcookie("TestCookie2", 'TestValue2', time()+3600, "/subdir/", ".localhost", 1, 0);
+setcookie("TestCookie3", 'TestValue3', time()+3600, "/subdir/", ".localhost", 0, 0);
 
 header('Bogus Header1: 23');
 header('Bogus Header2: 24');
