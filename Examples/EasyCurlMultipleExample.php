@@ -23,8 +23,8 @@
  *              Else whole object would be sent to callback.
  */
 
-require_once('EasyCurlExecuter.php');
-require_once('EasyCurlRequest.php');
+require_once('../Libraries/EasyCurlExecuter.php');
+require_once('../Libraries/EasyCurlRequest.php');
 
 function SampleCallbackFunction($response)                          // A simple call back without class
 {

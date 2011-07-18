@@ -7,7 +7,7 @@
  * @version 1.0
  */
  
-require_once('EasyCurlCookieHelper.php');
+require_once('../Helpers/EasyCurlCookieHelper.php');
 
 /**
  * EasyCurlResponse

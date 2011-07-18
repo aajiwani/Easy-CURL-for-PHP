@@ -7,7 +7,7 @@
  * @version 1.0
  */
 
-require_once('EasyCurlRequest.php');
+require_once('../Libraries/EasyCurlRequest.php');
 
 $easyCurlRequest = new EasyCurlRequest('http://localhost/easycurl/SampleServer.php', EasyCurlRequestType::POST);
 

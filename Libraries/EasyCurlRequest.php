@@ -8,7 +8,7 @@
  */
 
 require_once('EasyCurlExceptions.php');
-require_once('EasyCurlHelperClasses.php');
+require_once('../Helpers/EasyCurlHelperClasses.php');
 require_once('EasyCurlExceptions.php');
 require_once('EasyCurlError.php');
 require_once('EasyCurlResponse.php');

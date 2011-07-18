@@ -1,8 +1,10 @@
 <?php
 
 /**
- * @author Amir Ali Jiwani
+ * @author Amir Ali Jiwani <amir.ali@pi-labs.net>
  * @copyright 2011
+ * @link http://www.facebook.com/aajiwani
+ * @version 1.0
  */
  
 class EasyCurlRequestTypeException extends Exception
